@@ -101,14 +101,34 @@ class InterfaceController: WKInterfaceController {
         
     }
     
+    var clockAlert = 5.0 + 1 // seconds
+    
     @objc func timerAction(){
         timerAccumulator += 1
         labelClock.setText(String(timerAccumulator))
+        if timerAccumulator >= clockAlert{
+            timerMainDisplay.setTextColor(UIColor.orange)
+        }
     }
     
     @IBOutlet weak var buttonReset: WKInterfaceButton!
     
     @IBAction func buttonResetPressed() {
+        
+        timerMasterClockAction(.RESET)
+
+        timerAccumulator = 0
+        
+        labelClock.setText(String(timerAccumulator))
+        timerMainDisplay.setTextColor(UIColor.white)
+
+//        timerMasterClockAction(.STOP)
+        buttonStartStop.setTitle("START")
+        buttonStartStop.setBackgroundColor(UIColor.darkGray)
+        timerMainDisplay.setDate(Date())
+        timerMainDisplay.stop()
+        
+        clockMainState = .STOPPED
         
     }
     
