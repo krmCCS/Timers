@@ -101,51 +101,6 @@ class InterfaceController: WKInterfaceController {
         
     }
     
-    /*
-    func toggleWatchTimer(){
-        
-        switch watchClockState {
-            
-        case .ACTIVE:
-            
-            //turn OFF the timer and record what the magintude timeInterval) is
-            stopTime = Date()
-            
-            timerCurrentCount += stopTime.timeIntervalSince(startTime)
-            
-            basicTimer.stop()
-            
-            watchClockState = .STOPPED
-            
-            basicTimer.setTextColor(UIColor.red)
-            
-            
-        case .STOPPED, .RESET:
-            
-            
-            //var timerInterval = clockStoppedTime.timeIntervalSince(clockStartedTime)
-            
-            startTime = Date() // the now()
-            
-            let setTime = startTime.addingTimeInterval(-timerCurrentCount)
-            //timerCurrentCount = 0
-            
-            basicTimer.setDate(setTime)
-            basicTimer.start()
-            watchClockState = .ACTIVE
-            //clockStartedTime = Date()
-            basicTimer.setTextColor(UIColor.green)
-            
-            
-            
-        case .MAXLIMIT:
-            break
-        }
-        
-    }
-    */
-    
-    
     @objc func timerAction(){
         timerAccumulator += 1
         labelClock.setText(String(timerAccumulator))
