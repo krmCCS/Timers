@@ -1,1 +1,14 @@
-This is practice program with Timers, specifically on the Apple Watch. 
+10/9/2018
+
+needed to add a check for system awake as an initializer
+added a check for timer validation to make sure we werent making a new instantiation of a timer again and again
+changed the implementation of the timerAccumulator to be INT rather than DOUBLE
+
+10/8/2018
+
+This is practice program with Timers, specifically on the Apple Watch.
+
+This is determined to be a simulator issue. 
+
+the basics of the timer and the displayed clock appear to be working in this version. I thought that the Timer paused when the screen locks but in this version it did not . Not 100% sure why. Usable as a baseline for more advanced code.
+

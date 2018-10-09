@@ -23,10 +23,10 @@ class InterfaceController: WKInterfaceController {
     
     var timerMasterClock = Timer()
     
-    var timerAccumulator: Double = 0
+    var timerAccumulator: Int = 0
     
     var dateStart: Date = Date()
-    var dataStop: Date = Date()
+    var dateStop: Date = Date()
     
     var dateDeactivated: Date = Date()
     var dateWillAppear: Date = Date()
@@ -57,8 +57,8 @@ class InterfaceController: WKInterfaceController {
         case .RESET:
             //GO TO ACTIVE
             timerMasterClockAction(.START)
-            timerMainDisplay.setDate(Date()-timerAccumulator)
-
+            timerMainDisplay.setDate(Date()-TimeInterval(timerAccumulator))
+            
             buttonStartStop.setTitle("PAUSE")
             buttonStartStop.setBackgroundColor(UIColor.orange)
             timerMainDisplay.start()
@@ -69,8 +69,8 @@ class InterfaceController: WKInterfaceController {
         case .STOPPED:
             //GO TO ACTIVE
             timerMasterClockAction(.START)
-            timerMainDisplay.setDate(Date()-timerAccumulator)
-
+            timerMainDisplay.setDate(Date()-TimeInterval(timerAccumulator))
+            
             buttonStartStop.setTitle("PAUSE")
             buttonStartStop.setBackgroundColor(UIColor.orange)
             timerMainDisplay.start()
@@ -86,27 +86,36 @@ class InterfaceController: WKInterfaceController {
         switch command{
             
         case .RESET:
-            timerMasterClock.invalidate()
-
+            if timerMasterClock.isValid {
+                timerMasterClock.invalidate()
+            }
         case .STOP:
-            timerMasterClock.invalidate()
+            
+            if timerMasterClock.isValid {
+                timerMasterClock.invalidate()
+            }
+            
             
         case .START:
-            DispatchQueue.main.async { [unowned self] in
-                self.timerMasterClock = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(InterfaceController.timerAction), userInfo: nil, repeats: true)
+            
+            if !timerMasterClock.isValid {
                 
+                DispatchQueue.main.async { [unowned self] in
+                    self.timerMasterClock = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(InterfaceController.timerAction), userInfo: nil, repeats: true)
+                    
+                }
             }
             
         }
         
     }
     
-    var clockAlert = 5.0 + 1 // seconds
+    var clockAlert = 5 + 1 // seconds
     
     @objc func timerAction(){
         timerAccumulator += 1
         labelClock.setText(String(timerAccumulator))
-        if timerAccumulator >= clockAlert{
+        if timerAccumulator >= Int(clockAlert){
             timerMainDisplay.setTextColor(UIColor.orange)
         }
     }
@@ -116,13 +125,13 @@ class InterfaceController: WKInterfaceController {
     @IBAction func buttonResetPressed() {
         
         timerMasterClockAction(.RESET)
-
+        
         timerAccumulator = 0
         
         labelClock.setText(String(timerAccumulator))
         timerMainDisplay.setTextColor(UIColor.white)
-
-//        timerMasterClockAction(.STOP)
+        
+        //        timerMasterClockAction(.STOP)
         buttonStartStop.setTitle("START")
         buttonStartStop.setBackgroundColor(UIColor.darkGray)
         timerMainDisplay.setDate(Date())
@@ -145,12 +154,29 @@ class InterfaceController: WKInterfaceController {
     override func willActivate() {
         // This method is called when watch view controller is about to be visible to user
         super.willActivate()
-        timerMainDisplay.setDate(Date()-timerAccumulator)
+        
+        if clockMainState == .ACTIVE{
+            
+            
+            dateWillAppear = Date()
+            
+            timerAccumulator += Int(dateWillAppear.timeIntervalSince(dateDeactivated))
+            
+            
+            timerMainDisplay.setDate(Date()-TimeInterval(timerAccumulator))
+            
+            timerMasterClockAction(.START)
+            
+        }
     }
     
     override func didDeactivate() {
         // This method is called when watch view controller is no longer visible
         super.didDeactivate()
+        
+        dateDeactivated = Date()
+        timerMasterClockAction(.STOP)
+        
     }
     
 }
