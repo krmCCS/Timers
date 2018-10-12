@@ -8,7 +8,6 @@ changed the implementation of the timerAccumulator to be INT rather than DOUBLE
 
 This is practice program with Timers, specifically on the Apple Watch.
 
-This is determined to be a simulator issue. 
 
-the basics of the timer and the displayed clock appear to be working in this version. I thought that the Timer paused when the screen locks but in this version it did not . Not 100% sure why. Usable as a baseline for more advanced code.
+the basics of the timer and the displayed clock appear to be working in this version. I thought that the Timer paused when the screen locks but in this version it did not . Not 100% sure why. (This is determined to be a simulator issue.) Usable as a baseline for more advanced code.
 
